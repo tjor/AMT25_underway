@@ -75,7 +75,7 @@ function step1par(jday)
                % TO DO: MOVE INTO input_parameters
                % Read from calibration file
                %-------------------------------------
-               acsNoWL2 = get_acs_NoWL(D_CAL_FILES, ACS_CAL_FILE_NAME);   	
+               acsNoWL2 = get_acs_NoWL(D_CAL_FILES, ACS_CAL_FILE_NAME_2);   	
                acs2.raw = bindata_new(strdate, acsNoWL2*2);
                acs2.anc = bindata_new(strdate, 5);
            case 'ac9'
@@ -204,8 +204,8 @@ function step1par(jday)
     % ------------------------------------------------------------------------
    if (exist(savefile,"file"))
             tmp_WAPvars = load(savefile);
-            % Check if file is different by comparing the index of first available ctd measure
-            if min(find(~isnan(WAPvars.ctd.mean(:,1)))) != min(find(~isnan(tmp_WAPvars.WAPvars.ctd.mean(:,1))))
+            % Check if file is different by comparing the index of first available ctd measure - changed to
+            if min(find(~isnan(WAPvars.acs.raw.mean(:,20)))) != min(find(~isnan(tmp_WAPvars.WAPvars.acs.raw.mean(:,20)))) # 20th wl bin
                 % If file not the same, then merge the two
                 WAPvars = merge_WAPvars(WAPvars,tmp_WAPvars.WAPvars);
             endif

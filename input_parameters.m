@@ -9,40 +9,21 @@ warning("off");
 graphics_toolkit("gnuplot");
 
 %-----------------------------
-CRUISE = "AMT26";
-WAP_ROOT = strcat(lower(CRUISE),'_16') ; % tjor: `root" part of WAP file 
+CRUISE = "AMT25";
+WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
 #WAP_ROOT = strcat(lower(CRUISE),"b"); % tjor: `root" part of WAP file for <With_AC9_Without_ACS
 %-----------------------------
 % Variables to be changed during cruise according to specific setups and user needs
 %
 % Date
-% Set date interval to be processed (format is "yyyymmdd")
-% (this will have to be changed each time the scripts are run)
-% first day of cruise = 20180925, jday=268: "With_AC9/"  
-% day of switch to default config = 20180927, jday=270: "/" 
-% day of ACS switch = 20181019, jday=292": "With_AC9_Without_ACS/"% end day 301
-# last day is 20181028
-% dates
- 
- 
-# inidate = "20160923"; # 
-#inidate = "20161017";
-#enddate = "20161102";  # 
+  
+#inidate = "20150918"; 
+#enddate = "20151102";
 
-#
-inidate = "20161016"; # missing metadata?
-enddate = "20161016";
+inidate = "20150925"; # testdate
+enddate = "20150925";
 
-#inidate = "20161014"; # first day - jday 288 - testcase
-#enddate = "20161014"  # last day
 
-#inidate = "20181014";
-#enddate = "20180926";
-#enddate = "20181028"; # last day
-#enddate = "20181028"; # last day
-
-%inidate = "20181015";
-%enddate = "20181025";
 
 % Hour of the day for which Wapped files are searched
 % (day is not processed if a file for the specified hour is not found)
@@ -68,31 +49,33 @@ UWAY_WAP_SUBDIR = "/";
   #  dh8_ports = {1,2,3,4}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
  #   dh8_serialnumber = {227, 1173, 1426,[]};
-#elseif strcmp(UWAY_WAP_SUBDIR, "With_AC9/") == 1 % tjor: selects subdirectory with AC9
-  #  dh8_instruments = {"acs", "bb3", "ac9", "ctd"};
+if strcmp(UWAY_WAP_SUBDIR, "261/") == 1 % tjor: selects subdirectory with AC9
+    dh8_instruments = {"acs", "acs2", "", "ctd"};
     % Ports must corresponds to same ports as in dh8_instruments
  #   dh8_ports = {1,2,3,4}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
 #    dh8_serialnumber = {122, 1173, 227,[]};
-if strcmp(UWAY_WAP_SUBDIR, "/") == 1 % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted)
-    dh8_instruments = {"ctd", "acs", "cstar", "bb3"};
+else strcmp(UWAY_WAP_SUBDIR, "/") % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted)
+    dh8_instruments = {"acs", "acs2", "bb3", "cstar"};
     % Ports must corresponds to same ports as in dh8_instruments
-    dh8_ports = {2,7,6,1}; 
+    dh8_ports = {1,2,3,4}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-    dh8_serialnumber = {[], 122, 1426, 1173}; 
+    dh8_serialnumber = {122, 167, 1173, ""}; 
 endif
 %-----------------------------
 
 %-----------------------------
 % Paths
-MAIN_PATH = "/users/rsg/tjor/scratch_network/AMT_underway/AMT26/";
+MAIN_PATH = "/users/rsg/tjor/scratch_network/AMT_underway/AMT25/";
 
 #MAIN_PATH = "/data/abitibi1/scratch/scratch_disk/tjor/AMT_underway/AMT26/"; disp("\n\n-----------THIS IS FOR TOM----------\n\n"); fflush(stdout);
 %MAIN_PATH = "/tom/AMT_underway/AMT28/"; %disp("\n\n---------THIS IS FOR GIORGIO---------\n\n"); fflush(stdout);
 #MAIN_PATH = "/fast_scratch/AMT28/"; disp("\n\n---------THIS IS FOR GIORGIO---------\n\n"); fflush(stdout);
 % MAIN_PATH = [MAIN_PATH, "/Data/", CRUISE,"/"];     % Root directory for current AMT cruise
-PATH_DATA = [MAIN_PATH, "Data/PML_optics/"];        % Directory with all raw and wapped data
+PATH_DATA = [MAIN_PATH, "Data/"];        % Directory with all raw and wapped data
 #PATH_DATA  = "/data/datasets/cruise_data/active/AMT28/Optics_all/Optics/Data/";
+
+
 
 PATH_SOURCE = [MAIN_PATH, "Source/"];% Directory with all source code
 OUT_PROC = [MAIN_PATH, "Processed/"];    % Output directory for processed oct and mat files
@@ -103,7 +86,7 @@ addpath([PATH_SOURCE]);
 % Each directory will contain a series of subdirectories for each instrument
 % (e.g. Underway, Optics_rig, BB3_ctd etc. etc.)
 OPTIC_DIR = "Optics_rig/";
-UWAY_DIR = "Underway/";
+UWAY_DIR = ["UWay/"]
 BB3_DIR = "BB3_ctd/";
 CTD_DIR = "Ship_CTD/";
 % Specific data subdirectories
@@ -115,18 +98,17 @@ DATA_FLOW = "Flow/";
 
 %-----------------------------
 % calibration file dir
-D_CAL_FILES = [PATH_DATA, UWAY_DIR, "Cals/"];
+D_CAL_FILES = [MAIN_PATH "Cals/"]; # copied to scratch network 
 
 %-----------------------------
 % ACS calibration file
 ACS_CAL_FILE_NAME = "acs122.dev";
+ACS_CAL_FILE_NAME_2 = "acs167.dev";
 %-----------------------------
-
-
 
 %-----------------------------
 % Ship"s system directories
-PATH_SHIP = [PATH_DATA, "Ship_uway/"]; %tjor - ships meteorological data
+PATH_SHIP = [PATH_DATA, "UWay/ancillary/ancillary/"]; %tjor - ships meteorological data
 # PATH_TS = [PATH_SHIP, "Compress/"]; % Directory with ship underway ctd
 PATH_TS = PATH_SHIP; # no compress directory for amt 26
 
@@ -134,14 +116,14 @@ PATH_TS = PATH_SHIP; # no compress directory for amt 26
 # Input parameters for ship"s underway data
 # 
 # here we assume that the ship"s uway data are always stored in daily folders called YYYYDOY (e.g., 2018290) 
-addpath(UWAY_DIR) # location where rd seatech and ocean logger functions are stored
+addpath([MAIN_PATH, "Source/Underway/"]) # location where rd seatech and ocean logger functions are stored
 DIR_GPS = PATH_TS;
-GLOB_GPS = "2016\*";
+GLOB_GPS = "2015\*";
 FN_GPS = "seatex-gga.ACO";
 FNC_GPS = @rd_seatech_gga; # this function should be inside Source/Underway
 
 DIR_METDATA = PATH_TS;
-GLOB_METDATA = "2016\*";
+GLOB_METDATA = "2015\*";
 FN_METDATA = "oceanlogger.ACO";
 FNC_METDATA = @rd_oceanloggerJCR; # this function should be inside Source/Underway
 
