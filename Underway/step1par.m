@@ -67,6 +67,7 @@ function step1par(jday)
                % TO DO: MOVE INTO input_parameters
                % Read number of acs wavelengths from calibration file
 	       acsNoWL = get_acs_NoWL(D_CAL_FILES, ACS_CAL_FILE_NAME);   
+	
                %-------------------------------------
                acs.raw = bindata_new(strdate, acsNoWL*2);
                acs.anc = bindata_new(strdate, 5);
@@ -75,7 +76,8 @@ function step1par(jday)
                % TO DO: MOVE INTO input_parameters
                % Read from calibration file
                %-------------------------------------
-               acsNoWL2 = get_acs_NoWL(D_CAL_FILES, ACS_CAL_FILE_NAME_2);   	
+               acsNoWL2 = get_acs_NoWL(D_CAL_FILES, ACS_CAL_FILE_NAME_2);   
+     	
                acs2.raw = bindata_new(strdate, acsNoWL2*2);
                acs2.anc = bindata_new(strdate, 5);
            case 'ac9'
@@ -99,6 +101,8 @@ function step1par(jday)
 
    first_hour = 1
    last_hour = size(wapfiles,1)
+   
+  
 
    for ihour = first_hour:last_hour  %reads each hour of data and assign the data to their specific structures
    % for ihour = last_hour-1:last_hour  %reads each hour of data and assign the data to their specific structures
@@ -162,7 +166,7 @@ function step1par(jday)
                   acs2.anc = bindata_merge(acs2.anc, tmp_acs2.time, tmp_acs2.anc);
                   acs2.raw = bindata_merge(acs2.raw, tmp_acs2.time, tmp_acs2.raw(:,:));
                  % Save to output var
-                 WAPvars.acs2 = acs2;
+                  WAPvars.acs2 = acs2;
 
               case 'bb3'
                   tmp_bb3 = tmp_WAPvars.bb3_old;

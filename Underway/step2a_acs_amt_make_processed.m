@@ -59,10 +59,10 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
 
 
    % this is to skip ACs processng or when there are no ACs data
-   if (FORCE != 1 & (~exist('acs')) |  all(isnan(acs.raw.med(:,1))))
-      keyboard
-      return     
-   endif
+  # if (FORCE != 1 & (~exist('acs')) |  all(isnan(acs.raw.med(:,1))))
+  #    keyboard
+  #    return     
+   #endif
 
 
    % Apply ac-s QC

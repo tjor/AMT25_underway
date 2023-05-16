@@ -9,9 +9,9 @@ global FN_ROOT_STEP2
      yymmddHHMMDD = zeros(1440,6); # initialize empty matrix
      yymmddHHMMDD(:,3) = onemin*[0:1:1440-1]'; # assign to day-column the minute intervals
 
-     #tmp_time = datenum( ones(1440,1)*[0 0 0 0 0 0] + yymmddHHMMDD) + doy  -1   ; # compute julian day for current date (jdays(iday))
-     tmp_time = datenum( ones(1440,1)*[0 0 0 0 0 0] + yymmddHHMMDD) + doy; # -mod for leap year (2016 is leapyear)
-datevec(tmp_time(1))
+     tmp_time = datenum( ones(1440,1)*[0 0 0 0 0 0] + yymmddHHMMDD) + doy  + 1; # compute julian day for current date (jdays(iday))
+    # tmp_time = datenum( ones(1440,1)*[0 0 0 0 0 0] + yymmddHHMMDD) + doy; # -mod for leap year (2016 is leapyear)
+datevec(tmp_time(1)) # [print to check time vector is correct
      acs.time = tmp_time; # assign time vector to acs structure of this day
 
      # fill the rest of the acs structure with NaNs

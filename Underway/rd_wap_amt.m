@@ -160,8 +160,10 @@ function WAPvars = rd_wap_amt(flowdir, filename, fileext, dh8_instruments, dh8_p
 
                % Read the ac-s ascii data
                fn_acs = ls([filename acsname '.' fileext]);
+               
                if exist(fn_acs)
                    [msec_acs,craw,araw,cwl,awl,anc,c_cal,a_cal,c_T_cal,a_T_cal,T_bins] = rd_acs([fn_acs]);
+                  
                else
                    [msec_acs,craw,araw,cwl,awl,anc,c_cal,a_cal,c_T_cal,a_T_cal,T_bins] = deal([]);
                endif
@@ -175,8 +177,10 @@ function WAPvars = rd_wap_amt(flowdir, filename, fileext, dh8_instruments, dh8_p
 
                % Read the ac-s ascii data
                fn_acs2 = ls([filename acsname2 '.' fileext]);
+            
                if exist(fn_acs)
                   [msec_acs2,craw2,araw2,cwl2,awl2,anc2,c_cal2,a_cal2,c_T_cal2,a_T_cal2,T_bins2] = rd_acs(fn_acs2);
+                
                else
                   [msec_acs2,craw2,araw2,cwl2,awl2,anc2,c_cal2,a_cal2,c_T_cal2,a_T_cal2,T_bins2] = deal([]);
                endif

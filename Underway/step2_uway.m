@@ -63,6 +63,7 @@
 
         % Cycle through the variables within WAPvars
         instruments = fieldnames(WAPvars);
+    
         for iWAP = 1:length(instruments)
 
            disp(["Processing ", instruments{iWAP}, " data..."]);
@@ -75,7 +76,10 @@
                    step2a_acs_amt_make_processed(WAPvars.acs, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs");
        
                case "acs2"
-                   step2a_acs_amt_make_processed(WAPvars.acs2, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs2"); % tjor: was not tested for acs2 on AMT 28
+                 
+                   if  sum(~isnan(WAPvars.acs2.raw.med(:,1)))> 0 # added in for AMT 25 - many ACS2 files are empty
+                   	step2a_acs_amt_make_processed(WAPvars.acs2, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs2"); 
+                   endif
        
                case "ac9"
                    step2a_ac9_amt_make_processed(WAPvars.ac9, dailyfiles(iday), ac9_lim, FORCE=0, flow);

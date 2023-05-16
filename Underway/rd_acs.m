@@ -2,13 +2,13 @@ function [msec,c,a,cwl,awl,anc,c_cal,a_cal,c_T_cal,a_T_cal,T_bins] = rd_acs(fnam
 
 
     fid = fopen(fname, "r");
-
+    
         # skip header
             for ihead = 1:8
                 fgets(fid);
             endfor
 
-        # read number of wavelength
+        # read number of wadavelength
             tmp = fgets(fid);
             nwv = str2num(tmp(1:3));
 
