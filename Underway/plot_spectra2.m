@@ -47,7 +47,7 @@ function plot_spectra (jday_str, spectra_alim, spectra_clim, chl_lim)
    cmap = cmap(round(linspace(1,64,24)),:);
    colormap(cmap)
 
-   
+        
 
    if isfield(out, 'acs')
      if ~all(isnan(out.acs.ap))
@@ -145,6 +145,104 @@ function plot_spectra (jday_str, spectra_alim, spectra_clim, chl_lim)
       endif  
     endif
 
+
+ if isfield(out, 'acs2')
+
+     if ~all(isnan(out.acs2.ap))
+
+
+        figure(1, 'visible', 'off')
+        subplot(121)
+        for ihr = 0:23
+            hp = plot(out.acs2.wv, out.acs2.ap(1+35+ihr*1440/24, :));
+            set(hp, 'linewidth', 3, 'color', cmap(ihr+1,:))
+            hold on
+        endfor
+
+        
+        axis([400 750 0 spectra_alim])
+        
+        set(gca, 'position', [0.11        0.13     0.36       0.8], 'fontsize', 18)
+        
+        ylabel("a_p [m^{-1}]\n", 'fontsize', 26, 'fontweight', 'bold')
+        xlabel('wavelength [nm]', 'fontsize', 20, 'fontweight', 'bold')
+
+        grid on
+
+        set(gca, 'color', [1 1 1]*.6)
+
+        
+        subplot(122)
+        for ihr = 0:23
+            hp = plot(out.acs2.wv, out.acs2.ap(1+35+ihr*1440/24, :)./out.acs2.ap(1+35+ihr*1440/24, out.acs2.wv==440));
+            set(hp, 'linewidth', 3, 'color', cmap(ihr+1,:))
+            hold on
+        endfor
+
+        hcl = colorbar;
+
+        %z = get(hcl, 'zticklabel');
+        %for iz = 1:length(z)
+         %   z{iz} = sprintf('%02u', floor(str2num(z{iz})*23.9));
+        %endfor
+        %set(hcl, 'zticklabelmode', 'manual')
+        %set(hcl, 'ztick', str2num(cell2mat(z')));
+        %set(hcl, 'zticklabel', z, 'fontsize', 14);
+
+        axis([400 750 0 spectra_clim])
+
+        set(gcf, 'paperposition', [0.25         2.5           16           6])
+        set(gca, 'position', [0.57034        0.13     0.4       0.8], 'fontsize', 18)
+        set(hcl, 'position', [0.9        0.6      0.02       0.3], 'fontsize', 18 )
+
+        ylabel("a_p:a_p(440)\n", 'fontsize', 26, 'fontweight', 'bold')
+        xlabel('wavelength [nm]', 'fontsize', 20, 'fontweight', 'bold')
+
+        grid on
+
+        set(gca, 'color', [1 1 1]*.6)
+
+        fnout = [dout 'ap_' jday_str '_ACs.png'];
+        print('-dpng', fnout)
+
+    
+    
+        #### now plot chl estimate
+
+        #chlacs = medfilt1(chlacs(out.acs),11);
+        chlacs = chlacs(out.acs2);
+
+        close all
+        figure(1, 'visible', 'off')
+
+        semilogy(out.acs2.time+1, chlacs, '.')
+
+        %ylim([0 prctile(chl,97)+0.25])
+        %ylim([0.02 5])    
+        ylim(chl_lim)    
+
+        set(gcf, 'paperposition', [0.25         2.5           8           4])
+        set(gca, 'position', [0.2        0.2     0.75       0.7], 'fontsize', 18)
+        set(gca, 'yscale', 'log')
+        
+        ylabel("chl_{ACs} [mg m^{-3}]\n", 'fontsize', 24, 'fontweight', 'bold')
+        xlabel('decimal day of the year', 'fontsize', 20, 'fontweight', 'bold')
+
+        grid on
+
+        set(gca, 'color', [1 1 1]*.6)
+
+        fnout = [dout 'chl_' jday_str '_ACs.png'];
+        print('-dpng', fnout)
+        
+        
+        #save file with chl estimates 
+        outchl = [out.acs2.time+1 chlacs];
+        fnout = [dout 'chl_' jday_str '_ACs.dat'];
+        save("-ascii", fnout, "outchl");
+
+      endif  
+    endif
     
     
     if isfield(out, 'ac9')

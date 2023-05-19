@@ -15,27 +15,129 @@ WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file
 %-----------------------------
 % Variables to be changed during cruise according to specific setups and user needs
 %
+
+
 % Date
-  
+
+# These are dates for entire cruise  
 #inidate = "20150918"; 
 #enddate = "20151102";
 
-inidate = "20150925"; # testdate
-enddate = "20150925";
 
+#notes for AMT 25: there were 2 ACS systems on this cruise, that were both used for data collection
+# ACS 122 is `acs'. ACS 167 is `acs2' 
+
+# with AC167 and 122 - 261 subdir
+#inidate = "20150918"; # 261
+#enddate = "20150918"; # 261
+#WAP_ROOT = strcat(lower(CRUISE),'_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs", "acs2", "bb3"};
+#dh8_ports = {1,2,3}; 
+#dh8_serialnumber = {122, 167, 1173}; 
+#WAPhour = "10"
+#ACS_CAL_FILE_NAME = "acs122.dev";
+#ACS_CAL_FILE_NAME_2 = "acs167.dev";
+#UWAY_WAP_SUBDIR = "261/"
+
+
+# with AC167 and 122 - start of cruise
+#inidate = "20150918"; # 261
+#enddate = "20150918"; # 262
+#enddate = "20150926"; # 268
+#WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs", "acs2", "bb3"};
+#dh8_ports = {1,2,3,4}; 
+#dh8_serialnumber = {122, 167, 1173}; 
+#WAPhour = "019"
+#ACS_CAL_FILE_NAME = "acs122.dev";
+#ACS_CAL_FILE_NAME_2 = "acs167.dev";
+#UWAY_WAP_SUBDIR = "/"
+%----------------------------
+
+
+# with AC167 and 122 -cstar issues
+#inidate = "20150922"; #
+inidate = "20150924"; #
+enddate = "20150924"; # 270
+#enddate = "20150927"; # 270
+WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
+dh8_instruments = {"acs", "acs2", "bb3"};
+dh8_ports = {1,2,3} 
+dh8_serialnumber = {122, 167, 1173}; 
+WAPhour = "007"
+ACS_CAL_FILE_NAME = "acs122.dev";
+ACS_CAL_FILE_NAME_2 = "acs167.dev";
+UWAY_WAP_SUBDIR = "/";
+%----------------------------
+
+# with AC 167
+#inidate = "20150927"; # note first day with no flow data == 278
+#enddate = "20151028";
+#WAP_ROOT = strcat(lower(CRUISE),'c_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs2","bb3"};
+#dh8_ports = {1,3}; 
+#dh8_serialnumber = {167,1173}; #
+#WAPhour = "015";
+#ACS_CAL_FILE_NAME = "acs122.dev";
+#ACS_CAL_FILE_NAME_2 = "acs167.dev";
+#UWAY_WAP_SUBDIR = "/";
+%----------------------------
+
+# with AC122 and AC167 (at end of cruise)
+#inidate = "20151028";
+#enddate = "20151102";
+#WAP_ROOT = strcat(lower(CRUISE),'c_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs2", "acs","bb3"};
+#dh8_ports = {1,2,3} 
+#dh8_serialnumber = {167, 122, 1173}; # turn off c-star 
+#WAPhour = "017"
+#ACS_CAL_FILE_NAME = "acs122.dev";
+#ACS_CAL_FILE_NAME_2 = "acs167.dev";
+#UWAY_WAP_SUBDIR = "/";
+%----------------------------
+
+# with AC122 and AC167 (at end of cruise)
+#inidate = "20151101";
+#enddate = "20151102";
+#WAP_ROOT = strcat(lower(CRUISE),'c_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs2","bb3"};
+#dh8_ports = {1,3} 
+#dh8_serialnumber = {167, 1173}; # turn off c-star 
+#WAPhour = "017"
+#ACS_CAL_FILE_NAME = "acs122.dev";
+#ACS_CAL_FILE_NAME_2 = "acs167.dev";
+#UWAY_WAP_SUBDIR = "/";
+%----------------------------
+
+# step 2  
+#inidate = "20150924";
+#enddate = "20150924";
+#enddate = "20151005";
+#inidate = "20151030";
+#inidate = "20151101";
+#enddate = "20151102";
+#WAP_ROOT = strcat(lower(CRUISE),'c_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs", "bb3"};
+#dh8_ports = {1,3} 
+#dh8_serialnumber = {167, 1173}; # turn off c-star 
+#WAPhour = "017"
+#ACS_CAL_FILE_NAME = "acs167.dev";
+#ACS_CAL_FILE_NAME_2 = "acs122.dev";
+#UWAY_WAP_SUBDIR = "/";
+%----------------------------
 
 
 % Hour of the day for which Wapped files are searched
 % (day is not processed if a file for the specified hour is not found)
 % Format is "0HH"
-WAPhour = "019"; % tjor: `processes all days with 0XXth hour of data present"
+#WAPhour = "019"; % tjor: `processes all days with 0XXth hour of data present"
 #WAPhour = "007"; % for final day
 
 % Underway subdirectory where to find special wapped data
 % Leave with simple / if no special case
 #UWAY_WAP_SUBDIR = "With_AC9_Without_ACS/"; 
 #UWAY_WAP_SUBDIR = "With_AC9/"; 
-UWAY_WAP_SUBDIR = "/"; 
+
 
 % Parameters specific for Underway plotting/processing
 % (this will change depending on specific section fo the cruise)
@@ -49,19 +151,19 @@ UWAY_WAP_SUBDIR = "/";
   #  dh8_ports = {1,2,3,4}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
  #   dh8_serialnumber = {227, 1173, 1426,[]};
-if strcmp(UWAY_WAP_SUBDIR, "261/") == 1 % tjor: selects subdirectory with AC9
-    dh8_instruments = {"acs", "acs2", "", "ctd"};
+#if strcmp(UWAY_WAP_SUBDIR, "261/") == 1 % tjor: selects subdirectory with AC9
+ #  dh8_instruments = {"acs", "acs2", "", "ctd"};
     % Ports must corresponds to same ports as in dh8_instruments
  #   dh8_ports = {1,2,3,4}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
 #    dh8_serialnumber = {122, 1173, 227,[]};
-else strcmp(UWAY_WAP_SUBDIR, "/") % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted)
-    dh8_instruments = {"acs", "acs2", "bb3", "cstar"};
+#else strcmp(UWAY_WAP_SUBDIR, "/") % tjor: this is the `default" config (i.e. without subdirectories inside WAP_extracted)
+ #   dh8_instruments = {"acs", "acs2", "bb3", "cstar"};
     % Ports must corresponds to same ports as in dh8_instruments
-    dh8_ports = {1,2,3,4}; 
+  #  dh8_ports = {1,2,3,4}; 
     % Serial numbers are mainly needed for acs and ac9 config files, leave blank for other instruments
-    dh8_serialnumber = {122, 167, 1173, ""}; 
-endif
+   # dh8_serialnumber = {122, 167, 1173, ""}; 
+#endif
 %-----------------------------
 
 %-----------------------------
@@ -102,9 +204,7 @@ D_CAL_FILES = [MAIN_PATH "Cals/"]; # copied to scratch network
 
 %-----------------------------
 % ACS calibration file
-ACS_CAL_FILE_NAME = "acs122.dev";
-ACS_CAL_FILE_NAME_2 = "acs167.dev";
-%-----------------------------
+
 
 %-----------------------------
 % Ship"s system directories

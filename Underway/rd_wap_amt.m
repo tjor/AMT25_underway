@@ -62,7 +62,8 @@ function WAPvars = rd_wap_amt(flowdir, filename, fileext, dh8_instruments, dh8_p
       WAPvars.flow = flow;
    catch
        disp('No flow data');
-       keyboard
+       WAPvars.flow =[] # fix for no-flow
+       #keyboard
    end_try_catch
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -177,8 +178,8 @@ function WAPvars = rd_wap_amt(flowdir, filename, fileext, dh8_instruments, dh8_p
 
                % Read the ac-s ascii data
                fn_acs2 = ls([filename acsname2 '.' fileext]);
-            
-               if exist(fn_acs)
+        
+               if exist(fn_acs2)
                   [msec_acs2,craw2,araw2,cwl2,awl2,anc2,c_cal2,a_cal2,c_T_cal2,a_T_cal2,T_bins2] = rd_acs(fn_acs2);
                 
                else

@@ -41,6 +41,7 @@ function step1par(jday)
    %---GRG----
    wp = dir([wapdir,fn1, '*19_T_ASCII*']);  %identify each hour of 'iday'
 
+
    %break up the name
    for iwp = 1:size(wp,1)
       [token, remainder] = strtok(wp(iwp).name,'.');
@@ -196,8 +197,11 @@ function step1par(jday)
          WAPvars.flow_v = flow_v;
       catch
          disp('No flow data');
-         keyboard
+      
       end_try_catch
+      
+
+
 
     endfor
 
@@ -206,15 +210,15 @@ function step1par(jday)
     % ------------------------------------------------------------------------
     % Save data to MAT file for future use
     % ------------------------------------------------------------------------
+
    if (exist(savefile,"file"))
             tmp_WAPvars = load(savefile);
             % Check if file is different by comparing the index of first available ctd measure - changed to
-            if min(find(~isnan(WAPvars.acs.raw.mean(:,20)))) != min(find(~isnan(tmp_WAPvars.WAPvars.acs.raw.mean(:,20)))) # 20th wl bin
+            if min(find(~isnan(WAPvars.acs.raw.mean(:,20)))) != min(find(~isnan(tmp_WAPvars.WAPvars.acs.raw.mean(:,20)))) # 20th 
                 % If file not the same, then merge the two
                 WAPvars = merge_WAPvars(WAPvars,tmp_WAPvars.WAPvars);
             endif
         endif
-
 
     disp(['Saving',savefile])
     save('-v6', savefile, 'WAPvars')

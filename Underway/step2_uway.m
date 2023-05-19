@@ -57,6 +57,7 @@
         % Idea is that flow is always there
         % (also needed by ac9 processing)
         disp("processing Flow data...");  
+
         flow = step2f_flow_make_processed(WAPvars.flow, dailyfiles(iday));
         disp("...done"); 
 
@@ -71,14 +72,18 @@
            switch instruments{iWAP}
                case "flow"
                    disp("Flow already processed")
-
-               case "acs"
-                   step2a_acs_amt_make_processed(WAPvars.acs, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs");
+		
+	       case "acs"
+	   
+		        if  sum(~isnan(WAPvars.acs.raw.med(:,1)))> 1 # added in for AMT 25 - accounts for empty
+		           step2a_acs_amt_make_processed(WAPvars.acs, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs");
+	       	endif
        
                case "acs2"
-                 
-                   if  sum(~isnan(WAPvars.acs2.raw.med(:,1)))> 0 # added in for AMT 25 - many ACS2 files are empty
+                
+                   if  sum(~isnan(WAPvars.acs2.raw.med(:,1)))> 1 # added in for AMT 25 - many ACS2 files are empty
                    	step2a_acs_amt_make_processed(WAPvars.acs2, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs2"); 
+                   	
                    endif
        
                case "ac9"
@@ -100,7 +105,6 @@
 #                   keyboard
 
            endswitch
-
 
 
            disp("...done");
