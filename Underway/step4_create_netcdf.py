@@ -11,8 +11,8 @@ import ipdb
 
 
 def main(amt_n, amt_y):
-    pathin = '../../Processed/Underway/Step3/'
-    # pathin = '../../../AMT%s/Processed/Underway/Step3/' % amt_n
+    pathin = '/users/rsg/tjor/scratch_network/AMT_underway/AMT25/Processed/UWay/Step3/' # note: Underway in previous
+ #   pathin = '../../../AMT%s/Processed/Uway/Step3/' % amt_n
     # pathin = '/data/datasets/cruise_data/active/AMT%s/OSU/Optics/AMT%s_source/m/' % (amt_n,amt_n)
     # pathin = '../../Processed/Underway/Step3/'
     fname = 'amt%s_optics.mat' % amt_n
@@ -73,6 +73,12 @@ def main(amt_n, amt_y):
         ds['ac9_wv'] = amt['ac9'].item()['wv'].item().squeeze()
         ds['ac9_wv'].attrs = {'units' : 'nanometers'}
     
+    if 'acs2' in amtkeys:
+        ds.assign_coords(wv =  amt['acs2'].item()['wv'].item().squeeze() )
+        ds['acs2_wv'] = amt['acs2'].item()['wv'].item().squeeze()
+        ds['acs2_wv'].attrs = {'units' : 'nanometers'}
+    
+    
     ds.assign_coords(bb9wv =  np.array([470., 532., 700.]) )
     ds['bb3_wv'] = np.array([470., 532., 700.]) 
     ds['bb3_wv'].attrs = {'units' : 'nanometers'}
@@ -110,6 +116,14 @@ def main(amt_n, amt_y):
 
         # If ivar is acs need to pull out the wavelengths vector
         if ivar == 'acs':
+            acswv = _var['wv'].item().squeeze()
+            ## Add them to xarray coordinates
+            #xrcoords['wv'] = acswv
+            #xrcoords_attrs['wv_units'] = 'nanometers'
+            # drop wv from list
+            _varkeys.remove('wv')
+            
+        if ivar == 'acs2':
             acswv = _var['wv'].item().squeeze()
             ## Add them to xarray coordinates
             #xrcoords['wv'] = acswv
@@ -161,6 +175,16 @@ def main(amt_n, amt_y):
                                         ivar+'_'+iivar+'_equation' : 'chla = (acs.ap(:,wv676)-39/65.*acs.ap(:,wv650)-26/65*acs.ap(:,wv714))./0.014;',
                                         ivar+'_'+iivar+'_comment' : 'uncalibrated, not-debiased chl estimated from ACS ap'}
 
+                    elif (ivar == "acs2"):
+                       if (iivar == "N"):
+                           xrvars_attrs[ivar+'_'+iivar+"_units"] = 'number of binned measurements'
+        
+                       elif (iivar == "chl"):
+                           chlattrs = {ivar+'_'+iivar+'_units' : 'mg/m3',
+                                       ivar+'_'+iivar+'_equation' : 'chla = (acs.ap(:,wv676)-39/65.*acs.ap(:,wv650)-26/65*acs.ap(:,wv714))./0.014;',
+                                       ivar+'_'+iivar+'_comment' : 'uncalibrated, not-debiased chl estimated from ACS ap'}
+
+       
                     elif (ivar == "ac9"):
                    
                         if (iivar == "N"):
@@ -208,6 +232,10 @@ def main(amt_n, amt_y):
                         xrvars['%s_%s' % (ivar,iivar)] = (['time','acs_wv'],_tmp)
                         xrvars_attrs['%s_%s_units' % (ivar,iivar)] = '1/m'
                         
+                    if ivar == 'acs2':
+                            xrvars['%s_%s' % (ivar,iivar)] = (['time','acs_wv'],_tmp)
+                            xrvars_attrs['%s_%s_units' % (ivar,iivar)] = '1/m'
+                                
                     if ivar == 'ac9':
                             xrvars['%s_%s' % (ivar,iivar)] = (['time','ac9_wv'],_tmp)
                             xrvars_attrs['%s_%s_units' % (ivar,iivar)] = '1/m'
@@ -226,6 +254,9 @@ def main(amt_n, amt_y):
         
         if 'acs_chl' in i:
             ds[i].attrs = chlattrs 
+            
+        elif 'acs2' in i:
+            ds[i].attrs = chlattrs
 
         elif 'ac9_chl' in i:
             ds[i].attrs = ac9chlattrs 
@@ -246,8 +277,8 @@ def main(amt_n, amt_y):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--amt', default='28', help="Number of AMT cruise to process")
-    parser.add_argument('--year', default='2018', help="Year of AMT cruise to process")
+    parser.add_argument('--amt', default='25', help="Number of AMT cruise to process")
+    parser.add_argument('--year', default='2015', help="Year of AMT cruise to process")
     args = parser.parse_args()
     amt_n = args.amt
     amt_y = args.year

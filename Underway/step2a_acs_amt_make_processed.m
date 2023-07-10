@@ -187,11 +187,11 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
    %axis([188 189 0 .25])
    set(gca, 'ylim', acs_lim);
    title('raw a_p')
-   hold off
 
-   if acstype == 'acs'
+
+   if length(acstype) == 3 # acs 
        fnout = [DIR_FIGS 'raw_ap_' dailyfile.name(end-6:end-4)  '.png'];
-   elseif acstype == 'acs2'
+   elseif length(acstype) == 4 # acs2
        fnout = [DIR_FIGS 'raw_ap_acs2_' dailyfile.name(end-6:end-4)  '.png'];
    endif
    print('-dpng', fnout)
@@ -209,9 +209,10 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
    title('raw c_p')
    hold off    
 
-   if acstype == 'acs'
+
+   if length(acstype) == 3 # acs 
        fnout = [DIR_FIGS 'raw_cp_' dailyfile.name(end-6:end-4)  '.png'];
-   elseif acstype == 'acs2'
+   elseif length(acstype) == 4 # acs2
        fnout = [DIR_FIGS 'raw_cp_acs2_' dailyfile.name(end-6:end-4)  '.png'];
    endif
    print('-dpng', fnout)
@@ -301,9 +302,10 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
          acs.Tsb_corr.ap(i_nn(iap),:) = aTbcorr;
          acs.Tsb_corr.ap_u(i_nn(iap),:) = ap_err;
 
-         if acstype == 'acs'
+      
+         if length(acstype) == 3 # acs 
              save iap.txt iout -ascii
-         elseif acstype == 'acs2'
+         elseif length(acstype) == 4 # acs2 
              save iap_acs2.txt iout -ascii
          endif
 
@@ -337,16 +339,13 @@ function acsout = step2a_acs_amt_make_processed(acs, dailyfile, idays, acs_lim, 
 
    if exist(savefile, 'file')
       load(savefile);
-   endif
-
-   if acstype == 'acs'
+   
+   if length(acstype) == 3 # acs 
        out.acs = acs.Tsb_corr;
        out.acs.wv = acs.wl;
-
-   elseif acstype == 'acs2'
+   elseif length(acstype) == 4 # acs2 
        out.acs2 = acs.Tsb_corr;
        out.acs2.wv = acs.wl;
-
    endif
 
    save('-v6', savefile , 'out' )

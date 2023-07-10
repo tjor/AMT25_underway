@@ -40,6 +40,7 @@ run('../input_parameters.m')
 
 % Initialize amt_optics strucure
 
+
 % acs
 amt_optics.acs.chl   = [];
 amt_optics.acs.ap    = [];
@@ -50,6 +51,17 @@ amt_optics.acs.cp    = [];
 amt_optics.acs.cp_u  = [];
 amt_optics.acs.N     = [];
 amt_optics.acs.time  = [];
+
+% acs 2
+amt_optics.acs2.chl   = [];
+amt_optics.acs2.ap    = [];
+amt_optics.acs2.ap_u  = [];
+amt_optics.acs2.bp    = [];
+amt_optics.acs2.bp_u  = [];
+amt_optics.acs2.cp    = [];
+amt_optics.acs2.cp_u  = [];
+amt_optics.acs2.N     = [];
+amt_optics.acs2.time  = [];
 
 % ac9
 amt_optics.ac9.chl   = [];
@@ -144,7 +156,7 @@ for ifn = 1:size(fn,1)
     %     [out, it_acs_cp] = rm_noisy_acs_cp(out, t2remove_acs_cp, it_acs_cp );
     %     [out, it_chl] = rm_noisy_acs_chl(out, t2remove_acs_chl, it_chl);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
+    
 
     % Check if acs variable exists
     if ~isempty(intersect('acs', fieldnames(out)))
@@ -162,6 +174,36 @@ for ifn = 1:size(fn,1)
     else
         disp('acs do not exist in file')
     endif
+    
+        % Check if acs variable exists
+    if ~isempty(intersect('acs2', fieldnames(out)))
+        % load acs2 data into amt_optics
+        amt_optics.acs2.time = [amt_optics.acs2.time; out.acs2.time];
+        amt_optics.acs2.chl  = [amt_optics.acs2.chl;  chlacs(out.acs2)];
+        amt_optics.acs2.ap   = [amt_optics.acs2.ap;   out.acs2.ap];
+        amt_optics.acs2.bp   = [amt_optics.acs2.bp;   out.acs2.bp];
+        amt_optics.acs2.cp   = [amt_optics.acs2.cp;   out.acs2.cp];
+        amt_optics.acs2.ap_u   = [amt_optics.acs2.ap_u;   out.acs2.ap_u];
+        amt_optics.acs2.bp_u   = [amt_optics.acs2.bp_u;   out.acs2.bp_u];
+        amt_optics.acs2.cp_u   = [amt_optics.acs2.cp_u;   out.acs2.cp_u];
+        amt_optics.acs2.N      = [amt_optics.acs2.N;   out.acs2.N];
+       
+        amt_optics.acs2.wv   = [acs_wv];# ok to use acs1 wv as it is post-interpolation 
+       
+    else
+        disp('acs 2 do not exist in file')
+        #amt_optics.acs2.time = nan*ones*(size(acs.time));
+        #amt_optics.acs2.chl  = ones*(size(acs.chl));
+        #amt_optics.acs2.ap   = ones*(size(acs.ap));
+        #amt_optics.acs2.bp   =  ones*(size(acs.bp));
+        #amt_optics.acs2.cp   = ones*(size(acs.cp));
+        #amt_optics.acs2.ap_u   =  ones*(size(acs.ap_u));
+        #amt_optics.acs2.bp_u   = ones*(size(acs.bp_u));
+        #amt_optics.acs2.cp_u   =  ones*(size(acs.cp_u));
+        #amt_optics.acs2.N      = ones*(size(acs.N));
+       
+    endif
+    
 
    % Check if ac9 variable exists
     if ~isempty(intersect('ac9', fieldnames(out)))
@@ -253,8 +295,9 @@ endfor
 % Get current year from inidate
 t0 = y0(str2num(inidate(1:4)));
 
-amt_optics.time = amt_optics.acs.time + t0     ;%     
+amt_optics.time = amt_optics.acs.time + t0;     ;%     
 amt_optics.acs.time = amt_optics.acs.time + t0     ;%   
+amt_optics.acs2.time = amt_optics.acs2.time + t0     ;%   
 amt_optics.ac9.time = amt_optics.ac9.time + t0     ;%   
                                       
 
@@ -313,5 +356,20 @@ save('-v6', [DIR_STEP3 lower(CRUISE) '_optics.mat'], lower(CRUISE))
 %  out = [amt_optics.time-t0 amt_optics.undwy.lat amt_optics.undwy.lon amt_optics.acs.ap(:,wv532) amt_optics.acs.cp(:,wv532) amt_optics.bb3.bbp(:,2)];
 %  save -ascii surface_optics_amt22.dat out
 
+figure 
+plot(amt_optics.acs2.time, log10(abs(amt_optics.acs2.chl)))
+hold on
+plot(amt_optics.acs.time, log10(abs(amt_optics.acs.chl)),'r')
+
+figure
+plot(amt_optics.uway.time, amt_optics.uway.lat) 
+
+
+figure
+plot(amt_optics.uway.time)
+hold on
+plot(amt_optics.acs.time,'r')
+hold on
+plot(amt_optics.acs2.time,'g')
 
 
