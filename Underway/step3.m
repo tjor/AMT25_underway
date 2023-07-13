@@ -143,6 +143,7 @@ fn = dir([din "*mat"]);
 
 
 for ifn = 1:size(fn,1)
+    if i !=5
     disp(["\n" fn(ifn).name])
     load([din fn(ifn).name]);
     
@@ -157,10 +158,12 @@ for ifn = 1:size(fn,1)
     %     [out, it_chl] = rm_noisy_acs_chl(out, t2remove_acs_chl, it_chl);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-
+   sum(~isnan(chlacs(out.acs)))
+   
     % Check if acs variable exists
-    if ~isempty(intersect('acs', fieldnames(out)))
+    if (~isempty(intersect('acs', fieldnames(out))) & sum(~isnan(chlacs(out.acs)))>0)
         % load acs data into amt_optics
+ #amt_optics.acs.N
         amt_optics.acs.time = [amt_optics.acs.time; out.acs.time];
         amt_optics.acs.chl  = [amt_optics.acs.chl;  chlacs(out.acs)];
         amt_optics.acs.ap   = [amt_optics.acs.ap;   out.acs.ap];
@@ -173,6 +176,17 @@ for ifn = 1:size(fn,1)
         amt_optics.acs.wv   = [acs_wv];
     else
         disp('acs do not exist in file')
+       
+        amt_optics.acs.time = [amt_optics.acs.time; nan*ones(1,1440)']; # if no data, use acs 2 file size to fill-up nan-padded acs1
+        amt_optics.acs.chl  = [amt_optics.acs.chl; nan*ones(1,1440)']; # use scalar of time to initialize nans
+        amt_optics.acs.ap   = [amt_optics.acs.ap; nan*ones(176,1440)'];
+        amt_optics.acs.bp   =  [amt_optics.acs.bp; nan*ones(176,1440)'];
+        amt_optics.acs.cp   = [amt_optics.acs.cp; nan*ones(176,1440)'];
+        amt_optics.acs.ap_u   =  [amt_optics.acs.ap_u; nan*ones(176,1440)'];
+        amt_optics.acs.bp_u   = [amt_optics.acs.bp_u; nan*ones(176,1440)'];
+        amt_optics.acs.cp_u   = [amt_optics.acs.cp_u; nan*ones(176,1440)'];
+        amt_optics.acs.N      = [amt_optics.acs.N; nan*ones(1,1440)'];
+       
     endif
     
         % Check if acs variable exists
@@ -192,15 +206,17 @@ for ifn = 1:size(fn,1)
        
     else
         disp('acs 2 do not exist in file')
-        #amt_optics.acs2.time = nan*ones*(size(acs.time));
-        #amt_optics.acs2.chl  = ones*(size(acs.chl));
-        #amt_optics.acs2.ap   = ones*(size(acs.ap));
-        #amt_optics.acs2.bp   =  ones*(size(acs.bp));
-        #amt_optics.acs2.cp   = ones*(size(acs.cp));
-        #amt_optics.acs2.ap_u   =  ones*(size(acs.ap_u));
-        #amt_optics.acs2.bp_u   = ones*(size(acs.bp_u));
-        #amt_optics.acs2.cp_u   =  ones*(size(acs.cp_u));
-        #amt_optics.acs2.N      = ones*(size(acs.N));
+        amt_optics.acs2.time = [amt_optics.acs2.time; nan*ones(1,1440)'];# if no data, use acs file size to fill-up nan-padded acs3
+        amt_optics.acs2.chl  = [amt_optics.acs2.chl; nan*ones(1,1440)'];# use scalar of time to initialize nans
+        amt_optics.acs2.ap   = [amt_optics.acs2.ap; nan*ones(176,1440)'];
+        amt_optics.acs2.bp   =  [amt_optics.acs2.bp; nan*ones(176,1440)'];
+        amt_optics.acs2.cp   = [amt_optics.acs2.cp; nan*ones(176,1440)'];
+        amt_optics.acs2.ap_u   =  [amt_optics.acs2.ap_u; nan*ones(176,1440)'];
+        amt_optics.acs2.bp_u   = [amt_optics.acs2.bp_u; nan*ones(176,1440)'];
+        amt_optics.acs2.cp_u   =  [amt_optics.acs2.cp_u; nan*ones(176,1440)'];
+        amt_optics.acs2.N      = [amt_optics.acs2.N; nan*ones(1,1440)'];
+        
+        amt_optics.acs2.wv   = [acs_wv];# ok to u
        
     endif
     
@@ -257,7 +273,8 @@ for ifn = 1:size(fn,1)
         amt_optics.flow = [amt_optics.flow; out.flow.mean];      % NOTE the time of the flow has been match to the biased optics data in step1_make_optics_better_only_flow.m
     else
         disp('flow do not exist in file: What to do?')
-    #    keyboard # comment this out if there are missing step 2 files
+        amt_optics.flow = [amt_optics.flow; nan*ones(size(out.acs.time))];# if no data,
+        # keyboard # comment this out if there are missing step 2 files
     endif
 
     % Check if ctd variable exists
@@ -286,7 +303,7 @@ for ifn = 1:size(fn,1)
         disp('uway do not exists in file: What to do?')
    #     keyboard 
     endif
-
+endif
 endfor
 
 
@@ -295,10 +312,11 @@ endfor
 % Get current year from inidate
 t0 = y0(str2num(inidate(1:4)));
 
-amt_optics.time = amt_optics.acs.time + t0;     ;%     
-amt_optics.acs.time = amt_optics.acs.time + t0     ;%   
-amt_optics.acs2.time = amt_optics.acs2.time + t0     ;%   
-amt_optics.ac9.time = amt_optics.ac9.time + t0     ;%   
+
+amt_optics.time = amt_optics.acs.time + t0; %     
+amt_optics.acs.time = amt_optics.acs.time + t0 ;%   
+amt_optics.acs2.time = amt_optics.acs2.time + t0;%   
+amt_optics.ac9.time = amt_optics.ac9.time + t0;%   
                                       
 
 % Interpolate ship's underway on acs time  % tjor: p
@@ -308,7 +326,7 @@ for ifield = 1:length(fields)
    amt_optics.uway.(fields{ifield}) = total_uway.(fields{ifield});
 endfor
 
-
+amt_optics.time = amt_optics.uway.time; # redefine as merged time
 % wv532 = find(amt_optics.acs.wv>=532,1);
 % 
 % 
@@ -333,7 +351,7 @@ amt_optics.bb3.bbp_corr = amt_optics.bb3.bbp - amt_optics.bb3.bb02;
 % keyboard
 eval([lower(CRUISE) '= amt_optics;']) # create amtXX structure
 
-
+amt_optics = rmfield(amt_optics , 'ac9')
 
 
 if ~exist(DIR_STEP3,'dir')
@@ -356,20 +374,22 @@ save('-v6', [DIR_STEP3 lower(CRUISE) '_optics.mat'], lower(CRUISE))
 %  out = [amt_optics.time-t0 amt_optics.undwy.lat amt_optics.undwy.lon amt_optics.acs.ap(:,wv532) amt_optics.acs.cp(:,wv532) amt_optics.bb3.bbp(:,2)];
 %  save -ascii surface_optics_amt22.dat out
 
+
+
 figure 
-plot(amt_optics.acs2.time, log10(abs(amt_optics.acs2.chl)))
+plot(amt_optics.uway.lat, log10(abs(amt_optics.acs2.chl)))
 hold on
-plot(amt_optics.acs.time, log10(abs(amt_optics.acs.chl)),'r')
+plot(amt_optics.uway.lat, log10(abs(amt_optics.acs.chl)),'r')
 
-figure
-plot(amt_optics.uway.time, amt_optics.uway.lat) 
+#figure
+#plot(amt_optics.uway.time, amt_optics.uway.lat) 
 
 
-figure
-plot(amt_optics.uway.time)
-hold on
-plot(amt_optics.acs.time,'r')
-hold on
-plot(amt_optics.acs2.time,'g')
+#figure
+#plot(amt_optics.uway.time)
+#hold on
+#plot(amt_optics.acs.time,'r')
+#hold on
+#plot(amt_optics.acs2.time,'g')
 
 

@@ -29,10 +29,11 @@
 
    dailyfiles = dir(  [DIR_STEP1 "*mat"]  ); % redundancy with line 27? just different format
 
-
+ #keyboard
    %first_day = 1;   
    for iday = first_day:last_day
        
+      
         disp(["\n---------" dailyfiles(iday).name "--------\n"] )
         fflush(stdout);
         
@@ -58,7 +59,7 @@
         % (also needed by ac9 processing)
         disp("processing Flow data...");  
 
-        flow = step2f_flow_make_processed(WAPvars.flow, dailyfiles(iday));
+        #flow = step2f_flow_make_processed(WAPvars.flow, dailyfiles(iday));
         disp("...done"); 
 
 
@@ -82,6 +83,7 @@
                case "acs2"
                 
                    if  sum(~isnan(WAPvars.acs2.raw.med(:,1)))> 1 # added in for AMT 25 - many ACS2 files are empty
+                   #keyboard
                    	step2a_acs_amt_make_processed(WAPvars.acs2, dailyfiles(iday), iday, acs_lim, FORCE=0, "acs2"); 
                    	
                    endif

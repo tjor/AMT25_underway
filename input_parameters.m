@@ -41,37 +41,36 @@ WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file
 
 
 # with AC167 and 122 - start of cruise
-#inidate = "20150918"; # 261
-#enddate = "20150918"; # 262
-#enddate = "20150926"; # 268
-#WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
-#dh8_instruments = {"acs", "acs2", "bb3"};
-#dh8_ports = {1,2,3,4}; 
-#dh8_serialnumber = {122, 167, 1173}; 
-#WAPhour = "019"
-#ACS_CAL_FILE_NAME = "acs122.dev";
-#ACS_CAL_FILE_NAME_2 = "acs167.dev";
-#UWAY_WAP_SUBDIR = "/"
+inidate = "20150922"; 
+#enddate = "20150918"; 
+enddate = "20150922"; 
+WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
+dh8_instruments = {"acs", "acs2", "bb3"};
+dh8_ports = {1,2,3,4}; 
+dh8_serialnumber = {122, 167, 1173}; 
+WAPhour = "019"
+ACS_CAL_FILE_NAME = "acs122.dev";
+ACS_CAL_FILE_NAME_2 = "acs167.dev";
+UWAY_WAP_SUBDIR = "/"
 %----------------------------
 
 
 # with AC167 and 122 -cstar issues
-#inidate = "20150922"; #
-inidate = "20150924"; #
-enddate = "20150924"; # 270
-#enddate = "20150927"; # 270
-WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
-dh8_instruments = {"acs", "acs2", "bb3"};
-dh8_ports = {1,2,3} 
-dh8_serialnumber = {122, 167, 1173}; 
-WAPhour = "007"
-ACS_CAL_FILE_NAME = "acs122.dev";
-ACS_CAL_FILE_NAME_2 = "acs167.dev";
-UWAY_WAP_SUBDIR = "/";
-%----------------------------
 
-# with AC 167
-#inidate = "20150927"; # note first day with no flow data == 278
+#inidate = "20150927"; # 270
+##enddate = "20150927"; # 270
+#WAP_ROOT = strcat(lower(CRUISE),'b_15') ; % tjor: `root" part of WAP file 
+#dh8_instruments = {"acs", "acs2", "bb3"};
+#dh8_ports = {1,2,3} 
+#dh8_serialnumber = {122, 167, 1173}; 
+#WAPhour = "007"
+#ACS_CAL_FILE_NAME = "acs122.dev";
+#ACS_CAL_FILE_NAME_2 = "acs167.dev";
+#UWAY_WAP_SUBDIR = "/";
+%----------------------------
+ 
+ #with AC 167
+#inidate = "20150627"; # note first day with no flow data == 278 
 #enddate = "20151028";
 #WAP_ROOT = strcat(lower(CRUISE),'c_15') ; % tjor: `root" part of WAP file 
 #dh8_instruments = {"acs2","bb3"};
@@ -85,11 +84,12 @@ UWAY_WAP_SUBDIR = "/";
 
 # with AC122 and AC167 (at end of cruise)
 #inidate = "20151028";
-#enddate = "20151102";
+#inidate = "20151030";
+#enddate = "20151031";
 #WAP_ROOT = strcat(lower(CRUISE),'c_15') ; % tjor: `root" part of WAP file 
 #dh8_instruments = {"acs2", "acs","bb3"};
 #dh8_ports = {1,2,3} 
-#dh8_serialnumber = {167, 122, 1173}; # turn off c-star 
+#dh8_serialnumber = {167, 122, 1173}; # turn off c-star #
 #WAPhour = "017"
 #ACS_CAL_FILE_NAME = "acs122.dev";
 #ACS_CAL_FILE_NAME_2 = "acs167.dev";
