@@ -180,7 +180,7 @@ def main(amt_n, amt_y):
                            xrvars_attrs[ivar+'_'+iivar+"_units"] = 'number of binned measurements'
         
                        elif (iivar == "chl"):
-                           chlattrs = {ivar+'_'+iivar+'_units' : 'mg/m3',
+                           chlattrs2 = {ivar+'_'+iivar+'_units' : 'mg/m3',
                                        ivar+'_'+iivar+'_equation' : 'chla = (acs.ap(:,wv676)-39/65.*acs.ap(:,wv650)-26/65*acs.ap(:,wv714))./0.014;',
                                        ivar+'_'+iivar+'_comment' : 'uncalibrated, not-debiased chl estimated from ACS ap'}
 
@@ -256,7 +256,7 @@ def main(amt_n, amt_y):
             ds[i].attrs = chlattrs 
             
         elif 'acs2' in i:
-            ds[i].attrs = chlattrs
+            ds[i].attrs = chlattrs2
 
         elif 'ac9_chl' in i:
             ds[i].attrs = ac9chlattrs 
