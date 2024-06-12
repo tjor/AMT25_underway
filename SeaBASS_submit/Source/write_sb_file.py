@@ -31,7 +31,7 @@ def hdr(amt, fn_cal, fn_docs, model='ACS'):
     header = {
     "/begin_header": "",
     "/received=": "",
-    "/investigators=": "Giorgio_DallOlmo,Gavin_Tilstone,Tom_Jordan,Robert_Brewin",
+    "/investigators=": "Giorgio_DallOlmo,Gavin_Tilstone,Tom_Jordan",
     "/affiliations=": "Plymouth_Marine_Laboratory",
     "/contact=": "gdallolmo@ogs.it,ghti@pml.ac.uk,tjor@pml.ac.uk",
     "/experiment=": "AMT",
@@ -57,7 +57,7 @@ def hdr(amt, fn_cal, fn_docs, model='ACS'):
     "/missing=": "-9999",
     "/delimiter=": "comma",
     "/fields=": "",
-    "/units=": "yyyymmdd, hh:mm: ss, degrees, degrees, degreesC, PSU, 1/m, 1/m, 1/m, 1/m, none, ug/L",
+    "/units=": "yyyymmdd, hh:mm: ss, degrees, degrees, degreesC, PSU, 1/m, 1/m, 1/m, 1/m, 1/m, 1/m, none, ug/L",
     "/end_header": "",
     }
 
@@ -75,6 +75,12 @@ def hdr(amt, fn_cal, fn_docs, model='ACS'):
         for iwv in amt.wv.values:# add std_ap
             _fields = _fields + "ap" + str(iwv) + "_unc,"
             _units = _units + "1/m,"
+        for iwv in amt.wv.values:# add bp
+            _fields = _fields + "bp" + str(iwv) + ","
+            _units = _units + "1/m,"
+        for iwv in amt.wv.values:# add std_bp
+            _fields = _fields + "bp" + str(iwv) + "_unc,"
+            _units = _units + "1/m,"
         for iwv in amt.wv.values:# add std_ap
             _fields = _fields + "cp" + str(iwv) + ","
             _units = _units + "1/m,"
@@ -88,12 +94,37 @@ def hdr(amt, fn_cal, fn_docs, model='ACS'):
         for iwv in amt.ac9_wv.values:# add std_ap
             _fields = _fields + "ap" + str(iwv) + "_unc,"
             _units = _units + "1/m,"
+        for iwv in amt.wv.values:# add bp
+            _fields = _fields + "bp" + str(iwv) + ","
+            _units = _units + "1/m,"
+        for iwv in amt.wv.values:# add std_bp
+            _fields = _fields + "bp" + str(iwv) + "_unc,"
+            _units = _units + "1/m,"
         for iwv in amt.ac9_wv.values:# add std_ap
             _fields = _fields + "cp" + str(iwv) + ","
             _units = _units + "1/m,"
         for iwv in amt.ac9_wv.values:# add std_cp
             _fields = _fields + "cp" + str(iwv) + "_unc,"
             _units = _units + "1/m,"
+    elif model == 'ACS2':
+            for iwv in amt.wv.values:# add ap
+                _fields = _fields + "ap" + str(iwv) + ","
+                _units = _units + "1/m,"
+            for iwv in amt.wv.values:# add std_ap
+                _fields = _fields + "ap" + str(iwv) + "_unc,"
+                _units = _units + "1/m,"
+            for iwv in amt.wv.values:# add bp
+                _fields = _fields + "bp" + str(iwv) + ","
+                _units = _units + "1/m,"
+            for iwv in amt.wv.values:# add std_bp
+                _fields = _fields + "bp" + str(iwv) + "_unc,"
+                _units = _units + "1/m,"
+            for iwv in amt.wv.values:# add std_ap
+                _fields = _fields + "cp" + str(iwv) + ","
+                _units = _units + "1/m,"
+            for iwv in amt.wv.values:# add std_cp
+                _fields = _fields + "cp" + str(iwv) + "_unc,"
+                _units = _units + "1/m,"
 
     # add final parts to strings
     _fields = _fields + "bincount,Chl_lineheight"
@@ -172,7 +203,7 @@ def hdr_hplc(amt, fn_docs):
     "/begin_header": "",
     "/received=": "",
     #"/identifier_product_doi": "",
-    "/investigators=": "Giorgio_DallOlmo,Tom_Jordan,Gavin_Tilstone,Robert_Brewin",
+    "/investigators=": "Giorgio_DallOlmo,Tom_Jordan,Gavin_Tilstone",
     "/affiliations=": "Plymouth_Marine_Laboratory",
     "/contact=": "gdallolmo@ogs.it,tjor@pml.ac.uk,ghti@pml.ac.uk",
     "/experiment=": "AMT",
@@ -180,7 +211,7 @@ def hdr_hplc(amt, fn_docs):
     "/station=": "NA",
     "/data_file_name=": "",
     "/documents=": fn_docs,     
-    "/calibration_files=": 'AMT_26ESA_Pigments_methods.docx', 
+    "/calibration_files=": 'AMT25_Pigments_methods.docx', 
     "/data_type=": "pigment",
     "/data_status=": "preliminary",
     "/start_date=": "yyyymmdd",
@@ -283,6 +314,8 @@ def data_table(amt):
     sal = amt['uway_sal'].to_pandas()
     acs_ap = amt['acs_ap'].to_pandas()
     acs_ap_u = amt['acs_ap_u'].to_pandas()
+    acs_bp = amt['acs_bp'].to_pandas()
+    acs_bp_u = amt['acs_bp_u'].to_pandas()
     acs_cp = amt['acs_cp'].to_pandas()
     acs_cp_u = amt['acs_cp_u'].to_pandas()
     acs_N = amt['acs_N'].to_pandas()
@@ -299,13 +332,15 @@ def data_table(amt):
     sal              = sal[i_acs_ap_good]
     acs_ap           = acs_ap[i_acs_ap_good]
     acs_ap_u         = acs_ap_u[i_acs_ap_good]
+    acs_bp           = acs_bp[i_acs_ap_good]
+    acs_bp_u         = acs_bp_u[i_acs_ap_good]
     acs_cp           = acs_cp[i_acs_ap_good]
     acs_cp_u         = acs_cp_u[i_acs_ap_good]
     acs_N            = acs_N[i_acs_ap_good]
     acs_chl_debiased =   acs_chl_debiased[i_acs_ap_good]
 
     print('     concatenating Series...')
-    amt2csv = pd.concat([dates, times, lat, lon, sst, sal, acs_ap, acs_ap_u, acs_cp, acs_cp_u, acs_N, acs_chl_debiased], axis=1)
+    amt2csv = pd.concat([dates, times, lat, lon, sst, sal, acs_ap, acs_ap_u, acs_bp, acs_bp_u, acs_cp, acs_cp_u, acs_N, acs_chl_debiased], axis=1)
 
     print('     removing NaNs from lat and lon...')
     # remove NaNs from lat
@@ -317,6 +352,7 @@ def data_table(amt):
     print('...done')
 
     return amt2csv
+
 
 def data_table_acs2(amt):
     print('creating data table...')
@@ -335,11 +371,14 @@ def data_table_acs2(amt):
     sal = amt['uway_sal'].to_pandas()
     acs_ap = amt['acs2_ap'].to_pandas()
     acs_ap_u = amt['acs2_ap_u'].to_pandas()
+    acs_bp = amt['acs2_bp'].to_pandas()
+    acs_bp_u = amt['acs2_bp_u'].to_pandas()
     acs_cp = amt['acs2_cp'].to_pandas()
     acs_cp_u = amt['acs2_cp_u'].to_pandas()
     acs_N = amt['acs2_N'].to_pandas()
     acs_chl_debiased = amt['acs_chl_debiased_nomedfilt'].to_pandas() #
 
+   # breakpoint()
     # remove acs_ap == -9999
     i_acs_ap_good = acs_ap.values[:,10] != -9999
 
@@ -351,13 +390,16 @@ def data_table_acs2(amt):
     sal              = sal[i_acs_ap_good]
     acs_ap           = acs_ap[i_acs_ap_good]
     acs_ap_u         = acs_ap_u[i_acs_ap_good]
+    acs_bp           = acs_bp[i_acs_ap_good]
+    acs_bp_u         = acs_bp_u[i_acs_ap_good]
     acs_cp           = acs_cp[i_acs_ap_good]
     acs_cp_u         = acs_cp_u[i_acs_ap_good]
     acs_N            = acs_N[i_acs_ap_good]
     acs_chl_debiased =   acs_chl_debiased[i_acs_ap_good]
 
     print('     concatenating Series...')
-    amt2csv = pd.concat([dates, times, lat, lon, sst, sal, acs_ap, acs_ap_u, acs_cp, acs_cp_u, acs_N, acs_chl_debiased], axis=1)
+    amt2csv = pd.concat([dates, times, lat, lon, sst, sal, acs_ap, acs_ap_u, acs_bp, acs_bp_u, acs_cp, acs_cp_u, acs_N, acs_chl_debiased], axis=1)
+
 
     print('     removing NaNs from lat and lon...')
     # remove NaNs from lat
@@ -369,6 +411,7 @@ def data_table_acs2(amt):
     print('...done')
 
     return amt2csv
+
 
 def data_table_ac9(amt):
     print('creating data table...')
@@ -576,7 +619,7 @@ if __name__ == '__main__':
         fn_docs_acs_2 = 'checklist_acs_particulate_inline_AMT25.rtf,checklist_acs_ag_cg_AMT25.rtf,AMT25_ACS_inline_ProcessingReport.docx' # hardcoded - note filenames are same as first acs, but text can differ
         # fn_docs_ac9 = 'checklist_a9s_particulate_inline_AMT28.rtf,checklist_ac9_ag_cg_AMT28.rtf,AMT28_ACS_inline_ProcessingReport.docx' # hardcoded
       
-        fn_docs_hplc = 'checklist_hplc_PML_AMT25.rtf,AMT25_Pigments_methods.doc,AMT_25_Pigments.xlsx,AMT_25_Pigments_metadata.xlsx'
+        fn_docs_hplc = 'checklist_hplc_PML_AMT25.rtf,AMT25_Pigments_methods.docx,AMT_25_Pigments.xlsx,AMT_25_Pigments_metadata.xlsx'
         sys.path.append('../documents')
         
         #sys.path.append('../documents')
@@ -589,7 +632,7 @@ if __name__ == '__main__':
 
         # prepare header
         header_acs = hdr(amt, fn_cal_acs, fn_docs_acs, 'ACS')
-        header_acs2 = hdr(amt, fn_cal_acs, fn_docs_acs, 'ACS2')
+        header_acs2 = hdr(amt, fn_cal_acs_2, fn_docs_acs_2, 'ACS2')
         
         # header_ac9 = hdr(amt, fn_cal_ac9, fn_docs_ac9, 'AC9') # ACS and AC9 use same header writer function
         header_hplc = hdr_hplc(amt,fn_docs_hplc)
@@ -610,17 +653,18 @@ if __name__ == '__main__':
 
 
         # write file
-        # fnout_ac9 = '../sb_processed/' + header_ac9['/data_file_name=']
-        # export_2_seabass(header_ac9, amt2csv_ac9, fnout_ac9)
+   #     fnout_ac9 = '../sb_processed/' + header_ac9['/data_file_name=']
+     #   export_2_seabass(header_ac9, amt2csv_ac9, fnout_ac9)
 
         # write file
         fnout_hplc = '../sb_processed/' + header_hplc['/data_file_name=']
         export_2_seabass(header_hplc, amt2csv_hplc, fnout_hplc)
 
         # run fcheck
-        #run_fcheck(fnout_acs)
-        #run_fcheck(fnout_acs2)
-        #run_fcheck(fnout_ac9)
+        #
+        run_fcheck(fnout_acs)
+        run_fcheck(fnout_acs2)
+       # run_fcheck(fnout_ac9)
         run_fcheck(fnout_hplc)
 
 
